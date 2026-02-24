@@ -1,0 +1,13 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "cn.ksmcbrigade.hws.mixin",
+  "refmap": "${mod_id}.refmap.json",
+  "compatibilityLevel": "JAVA_18",
+  "server": [
+    "ServerConnectionListenerMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

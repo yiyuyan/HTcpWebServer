@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="forge Server" type="Application" factoryName="Application" singleton="false">
+    <envs>
+      <env name="MOD_CLASSES" value="modServerRun%%$PROJECT_DIR$/../HtcpWebServer\forge\build\sourcesSets\main" />
+      <env name="MCP_MAPPINGS" value="official_1.21" />
+    </envs>
+    <option name="MAIN_CLASS_NAME" value="net.minecraftforge.bootstrap.ForgeBootstrap" />
+    <module name="HTcpWebServer.forge.main" />
+    <option name="PROGRAM_PARAMETERS" value="--launchTarget forge_userdev_server --gameDir . --mixin.config hws.mixins.json --mixin.config hws.forge.mixins.json" />
+    <option name="VM_PARAMETERS" value="-Dnet.minecraftforge.gradle.GradleStart.srg.srg-mcp=D:\CommonMods\HtcpWebServer\forge\build\createSrgToMcp\output.srg -Dmixin.env.remapRefMap=true -Dmixin.env.refMapRemappingFile=D:\CommonMods\HtcpWebServer\forge\build\createSrgToMcp\output.srg -Dforge.enableGameTest=true -Djava.net.preferIPv6Addresses=system" />
+    <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../HtcpWebServer\forge\runs\server" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks=":forge:prepareServerCompile" externalProjectPath="$PROJECT_DIR$" />
+    </method>
+  </configuration>
+</component>

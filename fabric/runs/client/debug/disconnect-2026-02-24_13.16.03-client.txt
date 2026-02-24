@@ -1,0 +1,170 @@
+---- Minecraft Network Protocol Error Report ----
+// This time is not my fault, I promise!
+
+Time: 2026-02-24 13:16:03
+Description: Packet handling error
+
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.SocketChannelImpl.throwConnectionReset(SocketChannelImpl.java:401)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:434)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:254)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:357)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+
+A detailed walkthrough of the error, its code path and all known details is as follows:
+---------------------------------------------------------------------------------------
+
+-- Head --
+Thread: Netty Client IO #21
+Stacktrace:
+	at net.minecraft.network.PacketListener.fillCrashReport(PacketListener.java:33)
+
+-- Connection --
+Details:
+	Protocol: play
+	Flow: CLIENTBOUND
+	Server type: OTHER
+	Server brand: fabric
+Stacktrace:
+	at net.minecraft.network.PacketListener.fillCrashReport(PacketListener.java:33)
+	at net.minecraft.network.protocol.PacketUtils.fillCrashReport(PacketUtils.java:62)
+	at net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl.storeDisconnectionReport(ClientCommonPacketListenerImpl.java:136)
+	at net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl.createDisconnectionInfo(ClientCommonPacketListenerImpl.java:127)
+	at net.minecraft.network.Connection.exceptionCaught(Connection.java:161)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325)
+	at io.netty.channel.AbstractChannelHandlerContext.fireExceptionCaught(AbstractChannelHandlerContext.java:317)
+	at io.netty.channel.DefaultChannelPipeline$HeadContext.exceptionCaught(DefaultChannelPipeline.java:1377)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:346)
+	at io.netty.channel.AbstractChannelHandlerContext.invokeExceptionCaught(AbstractChannelHandlerContext.java:325)
+	at io.netty.channel.DefaultChannelPipeline.fireExceptionCaught(DefaultChannelPipeline.java:907)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.handleReadException(AbstractNioByteChannel.java:125)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:177)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:788)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:724)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:650)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:997)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+-- System Details --
+Details:
+	Minecraft Version: 1.21
+	Minecraft Version ID: 1.21
+	Operating System: Windows 11 (amd64) version 10.0
+	Java Version: 21.0.4, Amazon.com Inc.
+	Java VM Version: OpenJDK 64-Bit Server VM (mixed mode, sharing), Amazon.com Inc.
+	Memory: 121826640 bytes (116 MiB) / 702545920 bytes (670 MiB) up to 4223664128 bytes (4028 MiB)
+	CPUs: 16
+	Processor Vendor: GenuineIntel
+	Processor Name: 12th Gen Intel(R) Core(TM) i5-1240P
+	Identifier: Intel64 Family 6 Model 154 Stepping 3
+	Microarchitecture: Alder Lake
+	Frequency (GHz): 2.11
+	Number of physical packages: 1
+	Number of physical CPUs: 12
+	Number of logical CPUs: 16
+	Graphics card #0 name: Intel(R) Iris(R) Xe Graphics
+	Graphics card #0 vendor: Intel Corporation
+	Graphics card #0 VRAM (MiB): 1024.00
+	Graphics card #0 deviceId: VideoController1
+	Graphics card #0 versionInfo: 31.0.101.4502
+	Memory slot #0 capacity (MiB): 2048.00
+	Memory slot #0 clockSpeed (GHz): 4.27
+	Memory slot #0 type: LPDDR4
+	Memory slot #1 capacity (MiB): 2048.00
+	Memory slot #1 clockSpeed (GHz): 4.27
+	Memory slot #1 type: LPDDR4
+	Memory slot #2 capacity (MiB): 2048.00
+	Memory slot #2 clockSpeed (GHz): 4.27
+	Memory slot #2 type: LPDDR4
+	Memory slot #3 capacity (MiB): 2048.00
+	Memory slot #3 clockSpeed (GHz): 4.27
+	Memory slot #3 type: LPDDR4
+	Memory slot #4 capacity (MiB): 2048.00
+	Memory slot #4 clockSpeed (GHz): 4.27
+	Memory slot #4 type: LPDDR4
+	Memory slot #5 capacity (MiB): 2048.00
+	Memory slot #5 clockSpeed (GHz): 4.27
+	Memory slot #5 type: LPDDR4
+	Memory slot #6 capacity (MiB): 2048.00
+	Memory slot #6 clockSpeed (GHz): 4.27
+	Memory slot #6 type: LPDDR4
+	Memory slot #7 capacity (MiB): 2048.00
+	Memory slot #7 clockSpeed (GHz): 4.27
+	Memory slot #7 type: LPDDR4
+	Virtual memory max (MiB): 27884.24
+	Virtual memory used (MiB): 15952.99
+	Swap memory total (MiB): 11776.00
+	Swap memory used (MiB): 710.57
+	Space in storage for jna.tmpdir (MiB): <path not set>
+	Space in storage for org.lwjgl.system.SharedLibraryExtractPath (MiB): <path not set>
+	Space in storage for io.netty.native.workdir (MiB): <path not set>
+	Space in storage for java.io.tmpdir (MiB): available: 43322.37, total: 204800.00
+	Space in storage for workdir (MiB): available: 173268.94, total: 262889.00
+	JVM Flags: 0 total; 
+	Fabric Mods: 
+		fabric-api: Fabric API 0.100.1+1.21
+		fabric-api-base: Fabric API Base 0.4.42+6573ed8c90
+		fabric-api-lookup-api-v1: Fabric API Lookup API (v1) 1.6.65+b559734490
+		fabric-biome-api-v1: Fabric Biome API (v1) 13.0.28+6fc22b9990
+		fabric-block-api-v1: Fabric Block API (v1) 1.0.22+0af3f5a790
+		fabric-block-view-api-v2: Fabric BlockView API (v2) 1.0.10+6573ed8c90
+		fabric-blockrenderlayer-v1: Fabric BlockRenderLayer Registration (v1) 1.1.52+0af3f5a790
+		fabric-client-tags-api-v1: Fabric Client Tags 1.1.15+6573ed8c90
+		fabric-command-api-v1: Fabric Command API (v1) 1.2.48+f71b366f90
+		fabric-command-api-v2: Fabric Command API (v2) 2.2.27+6a6dfa1990
+		fabric-commands-v0: Fabric Commands (v0) 0.2.65+df3654b390
+		fabric-content-registries-v0: Fabric Content Registries (v0) 8.0.11+b559734490
+		fabric-convention-tags-v1: Fabric Convention Tags 2.0.12+7f945d5b90
+		fabric-convention-tags-v2: Fabric Convention Tags (v2) 2.2.1+d153f34490
+		fabric-crash-report-info-v1: Fabric Crash Report Info (v1) 0.2.29+0af3f5a790
+		fabric-data-attachment-api-v1: Fabric Data Attachment API (v1) 1.1.22+6a6dfa1990
+		fabric-data-generation-api-v1: Fabric Data Generation API (v1) 20.2.6+16c4ae2590
+		fabric-dimensions-v1: Fabric Dimensions API (v1) 4.0.0+6fc22b9990
+		fabric-entity-events-v1: Fabric Entity Events (v1) 1.6.12+6fc22b9990
+		fabric-events-interaction-v0: Fabric Events Interaction (v0) 0.7.10+e633f88390
+		fabric-game-rule-api-v1: Fabric Game Rule API (v1) 1.0.52+6573ed8c90
+		fabric-gametest-api-v1: Fabric Game Test API (v1) 2.0.0+6fc22b9990
+		fabric-item-api-v1: Fabric Item API (v1) 11.0.0+afdfc92190
+		fabric-item-group-api-v1: Fabric Item Group API (v1) 4.1.0+00ab0a6390
+		fabric-key-binding-api-v1: Fabric Key Binding API (v1) 1.0.47+0af3f5a790
+		fabric-keybindings-v0: Fabric Key Bindings (v0) 0.2.45+df3654b390
+		fabric-lifecycle-events-v1: Fabric Lifecycle Events (v1) 2.3.9+98a7dbbb90
+		fabric-loot-api-v2: Fabric Loot API (v2) 3.0.9+6573ed8c90
+		fabric-message-api-v1: Fabric Message API (v1) 6.0.13+6573ed8c90
+		fabric-model-loading-api-v1: Fabric Model Loading API (v1) 2.0.0+fe474d6b90
+		fabric-networking-api-v1: Fabric Networking API (v1) 4.1.0+686dcdce90
+		fabric-object-builder-api-v1: Fabric Object Builder API (v1) 15.1.10+d132107690
+		fabric-particles-v1: Fabric Particles (v1) 4.0.2+6573ed8c90
+		fabric-recipe-api-v1: Fabric Recipe API (v1) 5.0.8+6573ed8c90
+		fabric-registry-sync-v0: Fabric Registry Sync (v0) 5.0.21+b9828ba390
+		fabric-renderer-api-v1: Fabric Renderer API (v1) 3.2.16+fe474d6b90
+		fabric-renderer-indigo: Fabric Renderer - Indigo 1.6.3+cc9f121a90
+		fabric-renderer-registries-v1: Fabric Renderer Registries (v1) 3.2.66+df3654b390
+		fabric-rendering-data-attachment-v1: Fabric Rendering Data Attachment (v1) 0.3.48+73761d2e90
+		fabric-rendering-fluids-v1: Fabric Rendering Fluids (v1) 3.1.6+b559734490
+		fabric-rendering-v0: Fabric Rendering (v0) 1.1.69+df3654b390
+		fabric-rendering-v1: Fabric Rendering (v1) 5.0.3+d132107690
+		fabric-resource-conditions-api-v1: Fabric Resource Conditions API (v1) 4.2.1+d153f34490
+		fabric-resource-loader-v0: Fabric Resource Loader (v0) 1.1.3+b559734490
+		fabric-screen-api-v1: Fabric Screen API (v1) 2.0.24+b559734490
+		fabric-screen-handler-api-v1: Fabric Screen Handler API (v1) 1.3.78+b559734490
+		fabric-sound-api-v1: Fabric Sound API (v1) 1.0.23+6573ed8c90
+		fabric-transfer-api-v1: Fabric Transfer API (v1) 5.1.12+b559734490
+		fabric-transitive-access-wideners-v1: Fabric Transitive Access Wideners (v1) 6.0.12+6573ed8c90
+		fabricloader: Fabric Loader 0.15.11
+		hws: HtcpWebServer 1.0
+		java: OpenJDK 64-Bit Server VM 21
+		minecraft: Minecraft 1.21
+		mixinextras: MixinExtras 0.3.5
