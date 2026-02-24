@@ -14,9 +14,11 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
+
+import static cn.ksmcbrigade.hws.utils.HttpUtils.getFileList;
+import static cn.ksmcbrigade.hws.utils.HttpUtils.isHttpRequest;
 
 public class HTCPHandler extends ChannelInboundHandlerAdapter {
 
@@ -51,7 +53,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
             buf.markReaderIndex();
 
             if (isHttpRequest(buf)) {
-                FileInfo context = getFile(buf);
+                HttpUtils.FileInfo context = getFile(buf);
                 buf.resetReaderIndex();
                 handleHttpRequest(ctx, buf,context);
                 return;
@@ -63,116 +65,76 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         super.channelRead(ctx, msg);
     }
 
-    private String toString(ByteBuf byteBuf){
-        return byteBuf.copy().toString(StandardCharsets.US_ASCII);
-    }
-
-    private FileInfo getFile(ByteBuf byteBuf) throws IOException {
+    public HttpUtils.FileInfo getFile(ByteBuf byteBuf) throws IOException {
         String ref = "";
-        for (String s : toString(byteBuf).split("\n")) {
+        for (String s : HttpUtils.toString(byteBuf).split("\n")) {
             if(s.toUpperCase().startsWith("GET ")){
                 ref = s.substring(4).replace(" HTTP/1.1","");
             }
         }
-        File file = new File(normally(System.getProperty("user.dir")+"/"+webDir+ref));
+        File file = new File(normallyString(System.getProperty("user.dir")+"/"+webDir+ref));
         if(file.isDirectory()){
             File[] files = file.listFiles();
             if(files!=null){
                 for (File file1 : files) {
                     if(indexes.contains(file1.getName().toLowerCase())){
                         if(HttpUtils.isText(file1.getName())){
-                            return new FileInfo(null, Files.readString(file1.toPath()).getBytes());
+                            return new HttpUtils.FileInfo(null, Files.readString(file1.toPath()).getBytes());
                         }
                         else{
-                            return new FileInfo(file1,FileUtils.readFileToByteArray(file1));
+                            return new HttpUtils.FileInfo(file1, FileUtils.readFileToByteArray(file1));
                         }
                     }
                 }
-                return new FileInfo(null,getFileList(files).getBytes());
+                return new HttpUtils.FileInfo(null,getFileList(files,webDir).getBytes());
             }
             else{
-                return new FileInfo(null,createResponseHtml().getBytes());
+                return new HttpUtils.FileInfo(null,createResponseHtml().getBytes());
             }
         }
         else if(file.exists()){
             if(HttpUtils.isText(file.getName())){
-                return new FileInfo(null, Files.readString(file.toPath()).getBytes());
+                return new HttpUtils.FileInfo(null, Files.readString(file.toPath()).getBytes());
             }
             else{
-                return new FileInfo(file,FileUtils.readFileToByteArray(file));
+                return new HttpUtils.FileInfo(file, FileUtils.readFileToByteArray(file));
             }
         }
         else{
-            return new FileInfo(null,createResponseHtml().getBytes());
+            return new HttpUtils.FileInfo(null,createResponseHtml().getBytes());
         }
     }
 
-    public String getFileList(File[] files) {
-        StringBuilder builder = new StringBuilder("<!DOCTYPE html>" +
-                "<html>" +
-                "<head>" +
-                "<meta charset=\"UTF-8\">" +
-                "<title>Minecraft Web Server</title>" +
-                "</head>" +
-                "<body>");
-        builder.append("<li><a href=\"..\">..</a></li>\n");
-        for (File file : files) {
-            builder.append("<li><a href=\"")
-                    .append(file.getAbsolutePath().replace(
-                            new File(
-                                    System.getProperty("user.dir")+"/"+webDir)
-                                    .getAbsolutePath(),"").replace(File.separatorChar,'/')
-                    )
-                    .append("\">")
-                    .append(file.getAbsolutePath().replace(file.getParentFile().getAbsolutePath(),""))
-                    .append("</a></li>")
-                    .append("\n");
-        }
-        builder.append("</body>" +
-                "</html>");
-        return builder.toString();
-    }
-
-    private boolean isHttpRequest(ByteBuf buf) {
-        if (buf.readableBytes() < 4) {
-            return false;
-        }
-
-        ByteBuf copy = buf.copy();
-        try {
-            String prefix = copy.toString(StandardCharsets.US_ASCII).toUpperCase();
-            return prefix.startsWith("GET ") || prefix.startsWith("POST ");
-        } finally {
-            copy.release();
-        }
-    }
-
-    private void handleHttpRequest(ChannelHandlerContext ctx, ByteBuf buf,FileInfo context) {
+    private void handleHttpRequest(ChannelHandlerContext ctx, ByteBuf buf,HttpUtils.FileInfo context) {
         try {
             ReferenceCountUtil.release(buf);
 
-            byte[] contentBytes = context.context;
+            byte[] contentBytes = context.context();
             String type = "text/html";
-            if(context.file!=null){
-                type = HttpUtils.getContentType(context.file.getName());
+            if(context.file()!=null){
+                type = HttpUtils.getContentType(context.file().getName());
             }
 
             String headerBuilder = "HTTP/1.1 200 OK\r\n" +
                     "Content-Type: " + type + "\r\n" +
                     "Content-Length: " + contentBytes.length + "\r\n" +
+                    "Accept-Ranges: bytes\r\n" +
                     "Connection: close\r\n" +
                     "Server: Minecraft-Server\r\n" +
+                    "Cache-Control: public, max-age=86400\r\n" + //24hours
                     "\r\n";
 
             ByteBuf responseBuf = Unpooled.buffer();
             responseBuf.writeBytes(headerBuilder.getBytes(CharsetUtil.US_ASCII));
+
             responseBuf.writeBytes(contentBytes);
 
             ctx.writeAndFlush(responseBuf)
-                    .addListener(ChannelFutureListener.CLOSE)
-                    .addListener(future -> {
-                        if (!future.isSuccess()) {
-                            Constants.LOG.error("Failed to send HTTP response", future.cause());
+                    .addListener((ChannelFutureListener) future -> {
+                        try {
+                            future.channel().close();
+                        } catch (Exception e) {
+                            Constants.LOG.debug("Failed to close the http channel.",e);
                         }
                     });
 
@@ -203,7 +165,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    private String normally(String s){
+    private String normallyString(String s){
         StringBuilder builder = new StringBuilder();
         boolean f = true;
         for (char c : s.toCharArray()) {
@@ -221,6 +183,4 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
     private static boolean isInvalidPathChar(char ch) {
         return ch < ' ' || reservedChars.indexOf(ch) != -1;
     }
-
-    record FileInfo(File file,byte[] context){}
 }

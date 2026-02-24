@@ -1,6 +1,62 @@
 package cn.ksmcbrigade.hws.utils;
 
+import io.netty.buffer.ByteBuf;
+
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+
 public class HttpUtils {
+
+    public static boolean isHttpRequest(ByteBuf buf) {
+        if (buf.readableBytes() < 4) {
+            return false;
+        }
+
+        ByteBuf copy = buf.copy();
+        try {
+            String prefix = copy.toString(StandardCharsets.US_ASCII).toUpperCase();
+            return (prefix.startsWith("GET ") || prefix.startsWith("POST ")) && prefix.contains("HTTP/1.1");
+        } finally {
+            copy.release();
+        }
+    }
+
+    // === HTTP FILE LIST ===
+
+    public static String toString(ByteBuf byteBuf){
+        return byteBuf.copy().toString(StandardCharsets.US_ASCII);
+    }
+
+    public static String getFileList(File[] files,String web) {
+        StringBuilder builder = new StringBuilder("<!DOCTYPE html>" +
+                "<html>" +
+                "<head>" +
+                "<meta charset=\"UTF-8\">" +
+                "<title>Minecraft Web Server</title>" +
+                "</head>" +
+                "<body>");
+        builder.append("<li><a href=\"..\">..</a></li>\n");
+        for (File file : files) {
+            builder.append("<li><a href=\"")
+                    .append(file.getAbsolutePath().replace(
+                            new File(
+                                    System.getProperty("user.dir")+"/"+web)
+                                    .getAbsolutePath(),"").replace(File.separatorChar,'/')
+                    )
+                    .append("\">")
+                    .append(file.getAbsolutePath().replace(file.getParentFile().getAbsolutePath(),""))
+                    .append("</a></li>")
+                    .append("\n");
+        }
+        builder.append("</body>" +
+                "</html>");
+        return builder.toString();
+    }
+
+    public record FileInfo(File file,byte[] context){}
+
+    // === HTTP CONTENT TYPES ===
+
     public static String getContentType(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0) {
