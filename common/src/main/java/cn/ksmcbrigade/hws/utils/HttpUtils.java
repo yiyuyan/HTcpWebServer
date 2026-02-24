@@ -7,18 +7,64 @@ import java.nio.charset.StandardCharsets;
 
 public class HttpUtils {
 
+    // === HTTP REQUEST DECIDER
+
     public static boolean isHttpRequest(ByteBuf buf) {
-        if (buf.readableBytes() < 4) {
+        int readableBytes = buf.readableBytes();
+        if (readableBytes < 14) {
             return false;
         }
 
-        ByteBuf copy = buf.copy();
-        try {
-            String prefix = copy.toString(StandardCharsets.US_ASCII).toUpperCase();
-            return (prefix.startsWith("GET ") || prefix.startsWith("POST ")) && prefix.contains("HTTP/1.1");
-        } finally {
-            copy.release();
+        int readerIndex = buf.readerIndex();
+
+        byte firstByte = buf.getByte(readerIndex);
+        firstByte |= 0x20; // To lowest
+
+        int methodStart;
+        if (firstByte == 'g') {
+            if ((buf.getByte(readerIndex + 1) | 0x20) != 'e') return false;
+            if ((buf.getByte(readerIndex + 2) | 0x20) != 't') return false;
+            if (buf.getByte(readerIndex + 3) != ' ') return false;
+            methodStart = readerIndex + 4;
+        } else if (firstByte == 'p') {
+            if ((buf.getByte(readerIndex + 1) | 0x20) != 'o') return false;
+            if ((buf.getByte(readerIndex + 2) | 0x20) != 's') return false;
+            if ((buf.getByte(readerIndex + 3) | 0x20) != 't') return false;
+            if (buf.getByte(readerIndex + 4) != ' ') return false;
+            methodStart = readerIndex + 5;
+        } else {
+            return false;
         }
+
+        return findHttp11Fast(buf, methodStart, readerIndex + readableBytes);
+    }
+
+    private static boolean findHttp11Fast(ByteBuf buf, int start, int end) {
+        final byte[] PATTERN = {'H', 'T', 'T', 'P', '/', '1', '.', '1'};
+        final byte[] PATTERN_LOWER = {'h', 't', 't', 'p', '/', '1', '.', '1'};
+
+        for (int i = start; i <= end - 8; i++) {
+            byte b = buf.getByte(i);
+            if (b != 'H' && b != 'h') continue;
+
+            boolean match = true;
+            for (int j = 1; j < 8; j++) {
+                byte current = buf.getByte(i + j);
+                byte expected = PATTERN[j];
+                byte expectedLower = PATTERN_LOWER[j];
+
+                if (current != expected && current != expectedLower) {
+                    match = false;
+                    break;
+                }
+            }
+
+            if (match) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // === HTTP FILE LIST ===
