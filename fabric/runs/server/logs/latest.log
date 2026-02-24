@@ -1,5 +1,5 @@
-[15:59:57] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21 with Fabric Loader 0.15.11
-[15:59:57] [main/INFO] (FabricLoader) Loading 42 mods:
+[16:08:13] [main/INFO] (FabricLoader/GameProvider) Loading Minecraft 1.21 with Fabric Loader 0.15.11
+[16:08:14] [main/INFO] (FabricLoader) Loading 42 mods:
 	- fabric-api 0.100.1+1.21
 	- fabric-api-base 0.4.42+6573ed8c90
 	- fabric-api-lookup-api-v1 1.6.65+b559734490
@@ -42,34 +42,47 @@
 	- java 21
 	- minecraft 1.21
 	- mixinextras 0.3.5
-[15:59:57] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.5 Source=file:/D:/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.13.3+mixin.0.8.5/9527e6b0d2449408958fd1302594dc65ec5ade9c/sponge-mixin-0.13.3+mixin.0.8.5.jar Service=Knot/Fabric Env=SERVER
-[15:59:57] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
-[15:59:57] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_17
-[15:59:57] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_18
-[15:59:57] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
-[15:59:58] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.3.5).
-[16:00:12] [main/INFO] (HTcpWebServer) Hello to HTcpWebServer
-[16:00:12] [main/INFO] (Minecraft) Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
-[16:00:15] [main/INFO] (Minecraft) Loaded 1290 recipes
-[16:00:15] [main/INFO] (Minecraft) Loaded 1399 advancements
-[16:00:16] [main/INFO] (BiomeModificationImpl) Applied 0 biome modifications to 0 of 64 new biomes in 2.582 ms
-[16:00:16] [Server thread/INFO] (Minecraft) Starting minecraft server version 1.21
-[16:00:16] [Server thread/INFO] (Minecraft) Loading properties
-[16:00:16] [Server thread/INFO] (Minecraft) Default game type: SURVIVAL
-[16:00:16] [Server thread/INFO] (Minecraft) Generating keypair
-[16:00:16] [Server thread/INFO] (Minecraft) Starting Minecraft server on *:25565
-[16:00:16] [Server thread/INFO] (Minecraft) Using default channel type
-[16:00:16] [Server thread/WARN] (Minecraft) **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
-[16:00:16] [Server thread/WARN] (Minecraft) The server will make no attempt to authenticate usernames. Beware.
-[16:00:16] [Server thread/WARN] (Minecraft) While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
-[16:00:16] [Server thread/WARN] (Minecraft) To change this, set "online-mode" to "true" in the server.properties file.
-[16:00:16] [Server thread/INFO] (Minecraft) Preparing level "world"
-[16:00:17] [Server thread/INFO] (Minecraft) Preparing start region for dimension minecraft:overworld
-[16:00:18] [Worker-Main-11/INFO] (Minecraft) Preparing spawn area: 0%
-[16:00:18] [Worker-Main-11/INFO] (Minecraft) Preparing spawn area: 0%
-[16:00:18] [Server thread/INFO] (Minecraft) Time elapsed: 790 ms
-[16:00:18] [Server thread/INFO] (Minecraft) Done (2.010s)! For help, type "help"
-[16:03:18] [Server thread/INFO] (Minecraft) Player932[/127.0.0.1:2242] logged in with entity id 57 at (15.5, 70.0, -43.5)
-[16:03:18] [Server thread/INFO] (Minecraft) Player932 joined the game
-[16:03:22] [Server thread/INFO] (Minecraft) Player932 lost connection: Disconnected
-[16:03:22] [Server thread/INFO] (Minecraft) Player932 left the game
+[16:08:14] [main/INFO] (FabricLoader/Mixin) SpongePowered MIXIN Subsystem Version=0.8.5 Source=file:/D:/.gradle/caches/modules-2/files-2.1/net.fabricmc/sponge-mixin/0.13.3+mixin.0.8.5/9527e6b0d2449408958fd1302594dc65ec5ade9c/sponge-mixin-0.13.3+mixin.0.8.5.jar Service=Knot/Fabric Env=SERVER
+[16:08:14] [main/INFO] (FabricLoader/Mixin) Loaded Fabric development mappings for mixin remapper!
+[16:08:14] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_17
+[16:08:14] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_18
+[16:08:14] [main/INFO] (FabricLoader/Mixin) Compatibility level set to JAVA_21
+[16:08:15] [main/INFO] (FabricLoader/MixinExtras|Service) Initializing MixinExtras via com.llamalad7.mixinextras.service.MixinExtrasServiceImpl(version=0.3.5).
+[16:08:26] [main/INFO] (HTcpWebServer) Hello to HTcpWebServer
+[16:08:26] [main/INFO] (Minecraft) Environment: Environment[sessionHost=https://sessionserver.mojang.com, servicesHost=https://api.minecraftservices.com, name=PROD]
+[16:08:29] [main/INFO] (Minecraft) Loaded 1290 recipes
+[16:08:29] [main/INFO] (Minecraft) Loaded 1399 advancements
+[16:08:30] [main/INFO] (BiomeModificationImpl) Applied 0 biome modifications to 0 of 64 new biomes in 1.412 ms
+[16:08:30] [Server thread/INFO] (Minecraft) Starting minecraft server version 1.21
+[16:08:30] [Server thread/INFO] (Minecraft) Loading properties
+[16:08:30] [Server thread/INFO] (Minecraft) Default game type: SURVIVAL
+[16:08:30] [Server thread/INFO] (Minecraft) Generating keypair
+[16:08:30] [Server thread/INFO] (Minecraft) Starting Minecraft server on *:25565
+[16:08:30] [Server thread/INFO] (Minecraft) Using default channel type
+[16:08:30] [Server thread/WARN] (Minecraft) **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
+[16:08:30] [Server thread/WARN] (Minecraft) The server will make no attempt to authenticate usernames. Beware.
+[16:08:30] [Server thread/WARN] (Minecraft) While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
+[16:08:30] [Server thread/WARN] (Minecraft) To change this, set "online-mode" to "true" in the server.properties file.
+[16:08:30] [Server thread/INFO] (Minecraft) Preparing level "world"
+[16:08:32] [Server thread/INFO] (Minecraft) Preparing start region for dimension minecraft:overworld
+[16:08:32] [Worker-Main-8/INFO] (Minecraft) Preparing spawn area: 0%
+[16:08:32] [Worker-Main-8/INFO] (Minecraft) Preparing spawn area: 0%
+[16:08:33] [Server thread/INFO] (Minecraft) Time elapsed: 858 ms
+[16:08:33] [Server thread/INFO] (Minecraft) Done (2.096s)! For help, type "help"
+[16:10:54] [Server thread/INFO] (Minecraft) Player600[/127.0.0.1:17214] logged in with entity id 57 at (18.5, 70.0, -57.5)
+[16:10:54] [Server thread/INFO] (Minecraft) Player600 joined the game
+[16:10:54] [Server thread/WARN] (Minecraft) UUID of added entity already exists: Bat['Bat'/62, l='ServerLevel[world]', x=5.41, y=-17.19, z=-96.93]
+[16:10:59] [Server thread/INFO] (Minecraft) [Not Secure] <Player600> wow
+[16:11:09] [Server thread/INFO] (Minecraft) Player600 lost connection: Disconnected
+[16:11:09] [Server thread/INFO] (Minecraft) Player600 left the game
+[16:11:25] [Server thread/INFO] (Minecraft) Stopping the server
+[16:11:25] [Server thread/INFO] (Minecraft) Stopping server
+[16:11:25] [Server thread/INFO] (Minecraft) Saving players
+[16:11:25] [Server thread/INFO] (Minecraft) Saving worlds
+[16:11:25] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[world]'/minecraft:overworld
+[16:11:25] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[world]'/minecraft:the_nether
+[16:11:25] [Server thread/INFO] (Minecraft) Saving chunks for level 'ServerLevel[world]'/minecraft:the_end
+[16:11:25] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (world): All chunks are saved
+[16:11:25] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (DIM-1): All chunks are saved
+[16:11:25] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage (DIM1): All chunks are saved
+[16:11:25] [Server thread/INFO] (Minecraft) ThreadedAnvilChunkStorage: All dimensions are saved

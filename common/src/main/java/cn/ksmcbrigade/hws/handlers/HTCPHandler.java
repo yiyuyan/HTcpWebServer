@@ -115,8 +115,9 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                 "<title>Minecraft Web Server</title>" +
                 "</head>" +
                 "<body>");
+        builder.append("<li><a href=\"..\">..</a></li>\n");
         for (File file : files) {
-            builder.append("<a href=\"")
+            builder.append("<li><a href=\"")
                     .append(file.getAbsolutePath().replace(
                             new File(
                                     System.getProperty("user.dir")+"/"+webDir)
@@ -124,8 +125,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                     )
                     .append("\">")
                     .append(file.getAbsolutePath().replace(file.getParentFile().getAbsolutePath(),""))
-                    .append("</a>")
-                    .append("<p></p>")
+                    .append("</a></li>")
                     .append("\n");
         }
         builder.append("</body>" +
