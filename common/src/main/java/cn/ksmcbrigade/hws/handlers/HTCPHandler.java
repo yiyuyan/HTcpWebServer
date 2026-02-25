@@ -13,6 +13,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.List;
@@ -70,9 +71,10 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         for (String s : HttpUtils.toString(byteBuf).split("\n")) {
             if(s.toUpperCase().startsWith("GET ")){
                 ref = s.substring(4).replace(" HTTP/1.1","");
+                break;
             }
         }
-        File file = new File(normallyString(System.getProperty("user.dir")+"/"+webDir+ref));
+        File file = new File(normallyString(URLDecoder.decode(System.getProperty("user.dir")+"/"+webDir+ref)));
         if(file.isDirectory()){
             File[] files = file.listFiles();
             if(files!=null){

@@ -5,6 +5,11 @@ plugins {
 base {
     archivesName = "${mod_name}-NeoForge-${minecraft_version}"
 }
+repositories {
+    maven{
+        url = "https://mirror.sjtu.edu.cn/bmclapi/"
+    }
+}
 neoForge {
     version = neoforge_version
     // Automatically enable neoforge AccessTransformers if the file exists
