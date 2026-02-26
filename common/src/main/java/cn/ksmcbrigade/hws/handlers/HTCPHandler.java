@@ -14,12 +14,16 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
 import static cn.ksmcbrigade.hws.utils.HttpUtils.getFileList;
 import static cn.ksmcbrigade.hws.utils.HttpUtils.isHttpRequest;
+import static java.net.IDN.toASCII;
+import static java.net.IDN.toUnicode;
 
 public class HTCPHandler extends ChannelInboundHandlerAdapter {
 
@@ -70,18 +74,18 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         String ref = "";
         for (String s : HttpUtils.toString(byteBuf).split("\n")) {
             if(s.toUpperCase().startsWith("GET ")){
-                ref = s.substring(4).replace(" HTTP/1.1","");
+                ref = URLDecoder.decode(s.substring(4).replace(" HTTP/1.1",""),StandardCharsets.UTF_8);
                 break;
             }
         }
-        File file = new File(normallyString(URLDecoder.decode(System.getProperty("user.dir")+"/"+webDir+ref)));
+        File file = new File(normallyString(System.getProperty("user.dir")+"/"+webDir+ref));
         if(file.isDirectory()){
             File[] files = file.listFiles();
             if(files!=null){
                 for (File file1 : files) {
                     if(indexes.contains(file1.getName().toLowerCase())){
                         if(HttpUtils.isText(file1.getName())){
-                            return new HttpUtils.FileInfo(null, Files.readString(file1.toPath()).getBytes());
+                            return new HttpUtils.FileInfo(file1, Files.readString(file1.toPath()).getBytes());
                         }
                         else{
                             return new HttpUtils.FileInfo(file1, FileUtils.readFileToByteArray(file1));
@@ -96,7 +100,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         }
         else if(file.exists()){
             if(HttpUtils.isText(file.getName())){
-                return new HttpUtils.FileInfo(null, Files.readString(file.toPath()).getBytes());
+                return new HttpUtils.FileInfo(file, Files.readString(file.toPath()).getBytes());
             }
             else{
                 return new HttpUtils.FileInfo(file, FileUtils.readFileToByteArray(file));
@@ -115,6 +119,9 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
             String type = "text/html";
             if(context.file()!=null){
                 type = HttpUtils.getContentType(context.file().getName());
+            }
+            if(HttpUtils.isTextType(type)){
+                contentBytes = new String(contentBytes).getBytes(StandardCharsets.UTF_8);
             }
 
             String headerBuilder = "HTTP/1.1 200 OK\r\n" +

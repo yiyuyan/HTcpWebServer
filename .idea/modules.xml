@@ -4,13 +4,17 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc/HTcpWebServer.buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc/HTcpWebServer.buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/HTcpWebServer.common.iml" filepath="$PROJECT_DIR$/.idea/modules/common/HTcpWebServer.common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/HTcpWebServer.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/HTcpWebServer.common.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/HTcpWebServer.fabric.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/HTcpWebServer.fabric.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/HTcpWebServer.fabric.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/HTcpWebServer.fabric.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/HTcpWebServer.fabric.test.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/HTcpWebServer.fabric.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/HTcpWebServer.forge.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/HTcpWebServer.forge.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/HTcpWebServer.forge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/HTcpWebServer.forge.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/HTcpWebServer.forge.test.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/HTcpWebServer.forge.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/HTcpWebServer.neoforge.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/HTcpWebServer.neoforge.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/common/cn.ksmcbrigade.HTcpWebServer.common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/common/cn.ksmcbrigade.HTcpWebServer.common.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/HTcpWebServer.neoforge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/HTcpWebServer.neoforge.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/cn.ksmcbrigade.HTcpWebServer.fabric.main.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/cn.ksmcbrigade.HTcpWebServer.fabric.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/fabric/cn.ksmcbrigade.HTcpWebServer.fabric.test.iml" filepath="$PROJECT_DIR$/.idea/modules/fabric/cn.ksmcbrigade.HTcpWebServer.fabric.test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/cn.ksmcbrigade.HTcpWebServer.forge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/cn.ksmcbrigade.HTcpWebServer.forge.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/forge/cn.ksmcbrigade.HTcpWebServer.forge.test.iml" filepath="$PROJECT_DIR$/.idea/modules/forge/cn.ksmcbrigade.HTcpWebServer.forge.test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/neoforge/cn.ksmcbrigade.HTcpWebServer.neoforge.main.iml" filepath="$PROJECT_DIR$/.idea/modules/neoforge/cn.ksmcbrigade.HTcpWebServer.neoforge.main.iml" />
     </modules>
