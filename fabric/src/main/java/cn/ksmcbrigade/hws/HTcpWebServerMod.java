@@ -1,11 +1,11 @@
 package cn.ksmcbrigade.hws;
 
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
 
-public class HTcpWebServerMod implements ModInitializer {
+public class HTcpWebServerMod implements DedicatedServerModInitializer {
 
     @Override
-    public void onInitialize() {
-        CommonClass.init();
+    public void onInitializeServer() {
+        HTcpWebServerModMain.init();
     }
 }

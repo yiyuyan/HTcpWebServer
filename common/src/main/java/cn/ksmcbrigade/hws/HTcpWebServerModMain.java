@@ -1,5 +1,8 @@
 package cn.ksmcbrigade.hws;
 
+import cn.ksmcbrigade.hws.event.handlers.BlockEventHandler;
+import cn.ksmcbrigade.hws.event.handlers.PHPEventHandler;
+import com.google.common.eventbus.EventBus;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -12,7 +15,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommonClass {
+public class HTcpWebServerModMain {
+
+    public static final EventBus EVENT_BUS = new EventBus(Constants.MOD_ID);
 
     public static String webDir = "web";
     public static List<String> indexes = List.of(
@@ -23,6 +28,8 @@ public class CommonClass {
 
     public static void init() {
         Constants.LOG.info("Hello to {}",Constants.MOD_NAME);
+        BlockEventHandler.init();
+        PHPEventHandler.init();
     }
 
     public static void genConfig() throws IOException {

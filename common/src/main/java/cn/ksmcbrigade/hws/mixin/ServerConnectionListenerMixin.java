@@ -1,6 +1,6 @@
 package cn.ksmcbrigade.hws.mixin;
 
-import cn.ksmcbrigade.hws.CommonClass;
+import cn.ksmcbrigade.hws.HTcpWebServerModMain;
 import cn.ksmcbrigade.hws.handlers.HTCPHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -17,11 +17,11 @@ public class ServerConnectionListenerMixin {
 
     @Redirect(method = "startTcpServerListener", at = @At(value = "INVOKE", target = "Lio/netty/bootstrap/ServerBootstrap;childHandler(Lio/netty/channel/ChannelHandler;)Lio/netty/bootstrap/ServerBootstrap;"))
     public ServerBootstrap startHttpServerListener(ServerBootstrap instance, ChannelHandler childHandler) throws IOException {
-        CommonClass.genConfig();
+        HTcpWebServerModMain.genConfig();
         return instance.childHandler(new ChannelInitializer<>() {
             @Override
             protected void initChannel(Channel ch) throws Exception {
-                ch.pipeline().addFirst(new HTCPHandler(CommonClass.webDir,CommonClass.indexes));
+                ch.pipeline().addFirst(new HTCPHandler(HTcpWebServerModMain.webDir, HTcpWebServerModMain.indexes));
                 if (childHandler instanceof ChannelInitializer<?> channelInitializer) {
                     Method method = channelInitializer.getClass().getDeclaredMethod("initChannel", Channel.class);
                     method.setAccessible(true);

@@ -15,7 +15,7 @@
   "icon": "${mod_id}.png",
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "server": [
       "cn.ksmcbrigade.hws.HTcpWebServerMod"
     ]
   },

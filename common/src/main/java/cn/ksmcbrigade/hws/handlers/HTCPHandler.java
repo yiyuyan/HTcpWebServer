@@ -1,6 +1,8 @@
 package cn.ksmcbrigade.hws.handlers;
 
 import cn.ksmcbrigade.hws.Constants;
+import cn.ksmcbrigade.hws.HTcpWebServerModMain;
+import cn.ksmcbrigade.hws.event.ReceiveHttpRequestEvent;
 import cn.ksmcbrigade.hws.utils.HttpUtils;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -14,7 +16,6 @@ import org.apache.commons.io.FileUtils;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -22,8 +23,6 @@ import java.util.List;
 
 import static cn.ksmcbrigade.hws.utils.HttpUtils.getFileList;
 import static cn.ksmcbrigade.hws.utils.HttpUtils.isHttpRequest;
-import static java.net.IDN.toASCII;
-import static java.net.IDN.toUnicode;
 
 public class HTCPHandler extends ChannelInboundHandlerAdapter {
 
@@ -74,11 +73,17 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         String ref = "";
         for (String s : HttpUtils.toString(byteBuf).split("\n")) {
             if(s.toUpperCase().startsWith("GET ")){
-                ref = URLDecoder.decode(s.substring(4).replace(" HTTP/1.1",""),StandardCharsets.UTF_8);
+                ref = normallyString(URLDecoder.decode(s.substring(4).replace(" HTTP/1.1",""),StandardCharsets.UTF_8));
                 break;
             }
         }
-        File file = new File(normallyString(System.getProperty("user.dir")+"/"+webDir+ref));
+
+        File file = new File(System.getProperty("user.dir")+"/"+webDir+ref);
+
+        ReceiveHttpRequestEvent event = new ReceiveHttpRequestEvent(ref,file);
+        HTcpWebServerModMain.EVENT_BUS.post(event);
+        if(event.returnInfo!=null) return event.returnInfo;
+
         if(file.isDirectory()){
             File[] files = file.listFiles();
             if(files!=null){
@@ -95,7 +100,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                 return new HttpUtils.FileInfo(null,getFileList(files,webDir).getBytes());
             }
             else{
-                return new HttpUtils.FileInfo(null,createResponseHtml().getBytes());
+                return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes());
             }
         }
         else if(file.exists()){
@@ -107,7 +112,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
             }
         }
         else{
-            return new HttpUtils.FileInfo(null,createResponseHtml().getBytes());
+            return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes());
         }
     }
 
@@ -153,8 +158,12 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         }
     }
 
-    private String createResponseHtml() {
-        return "<!DOCTYPE html>" +
+    public static String createResponseHtml(int errorCode){
+        return createResponseHtml("ERROR "+errorCode);
+    }
+
+    public static String createResponseHtml(String info) {
+        return ("<!DOCTYPE html>" +
                 "<html>" +
                 "<head>" +
                 "<meta charset=\"UTF-8\">" +
@@ -162,10 +171,10 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                 "</head>" +
                 "<body>" +
                 "<div class=\"container\">" +
-                "<h1>ERROR 404 NOT FOUND</h1>" +
+                "<h1>{info}</h1>" +
                 "</div>" +
                 "</body>" +
-                "</html>";
+                "</html>").replace("{info}",info);
     }
 
     @Override
