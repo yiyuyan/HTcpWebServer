@@ -36,7 +36,9 @@ public record PHPEventHandler(String phpFile,boolean developmentEnv) {
             boolean development = Services.SERVICE.isDevelopmentEnvironment();
 
             if(phpJson.has("phpPath")) phpFile = phpJson.get("phpPath").getAsString();
-            if(phpJson.has("forceDevelopment")) development = phpJson.get("forceDevelopment").getAsBoolean();
+            if(phpJson.has("forceDevelopment") && phpJson.get("forceDevelopment").getAsBoolean()){
+                development = true;
+            }
 
             boolean phpSupport = false;
             ProcessBuilder processBuilder = new ProcessBuilder(
