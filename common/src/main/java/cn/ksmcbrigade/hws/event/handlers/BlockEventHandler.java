@@ -40,6 +40,7 @@ public record BlockEventHandler(Map<String, Integer> list) {
 
     @Subscribe
     public void onReceiveRequest(ReceiveHttpRequestEvent event) {
+        if(event.isRedirected()) return;
         for (String s : list.keySet()) {
             if (s.equals(event.originalGetUrl)) {
                 event.setErrorInfo(list.get(s));

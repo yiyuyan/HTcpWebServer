@@ -13,16 +13,19 @@ public class ReceiveHttpRequestEvent {
 
     public final JsonObject getArgs;
 
-    public final File requestFileOrDir;
+    private File requestFileOrDir;
 
     public HttpUtils.FileInfo returnInfo = null;
 
-    public ReceiveHttpRequestEvent(String originalGetInfo, File fileOrDir){
+    private boolean redirected = false;
+    private final boolean canBeRedirected;
+
+    public ReceiveHttpRequestEvent(String originalGetInfo, File fileOrDir,boolean canBeRedirected){
         this.originalGetInfo = originalGetInfo;
         this.requestFileOrDir = fileOrDir;
 
         String[] infos = originalGetInfo.split("\\?");
-        originalGetUrl = infos[0];
+        originalGetUrl = HTCPHandler.normallyString(infos[0]);
         getArgs = new JsonObject();
 
         if(infos.length>=2){
@@ -35,6 +38,8 @@ public class ReceiveHttpRequestEvent {
         else{
             originalGetArgs = "";
         }
+
+        this.canBeRedirected = canBeRedirected;
     }
 
     public void setReturnInfo(HttpUtils.FileInfo returnInfo) {
@@ -55,5 +60,23 @@ public class ReceiveHttpRequestEvent {
 
     public void setErrorInfo(String errorInfo){
         this.setReturnInfo(HTCPHandler.createResponseHtml(errorInfo));
+    }
+
+    public void redirectTo(File file){
+        if(isCanNOTBeRedirected()) return;
+        this.requestFileOrDir = file;
+        this.redirected = true;
+    }
+
+    public File getRequestFileOrDir() {
+        return requestFileOrDir;
+    }
+
+    public boolean isRedirected() {
+        return redirected;
+    }
+
+    public boolean isCanNOTBeRedirected() {
+        return !canBeRedirected;
     }
 }

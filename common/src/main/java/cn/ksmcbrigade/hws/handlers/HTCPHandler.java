@@ -9,20 +9,19 @@ import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.util.CharsetUtil;
 import io.netty.util.ReferenceCountUtil;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
 
 import static cn.ksmcbrigade.hws.utils.HttpUtils.getFileList;
 import static cn.ksmcbrigade.hws.utils.HttpUtils.isHttpRequest;
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 public class HTCPHandler extends ChannelInboundHandlerAdapter {
 
@@ -45,7 +44,10 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                 }
             }
             if(noIndex){
-                FileUtils.writeStringToFile(webD.toPath().resolve(indexes.getFirst()).toFile(),"<p>Hello HTcp Minecraft Server World!</p>", Charset.defaultCharset());
+                FileUtils.writeStringToFile(
+                        webD.toPath().resolve(indexes.getFirst()).toFile(),
+                        "<p>Hello HTcp Minecraft Server World!</p>",
+                        UTF_8);
             }
         }
     }
@@ -71,18 +73,33 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
 
     public HttpUtils.FileInfo getFile(ByteBuf byteBuf) throws IOException {
         String ref = "";
+        String originalInfo = "";
         for (String s : HttpUtils.toString(byteBuf).split("\n")) {
             if(s.toUpperCase().startsWith("GET ")){
-                ref = normallyString(URLDecoder.decode(s.substring(4).replace(" HTTP/1.1",""),StandardCharsets.UTF_8));
+                String requestLine = s.substring(4).replace(" HTTP/1.1","");
+                originalInfo = requestLine;
+                int queryIndex = requestLine.indexOf('?');
+                if (queryIndex != -1) {
+                    requestLine = requestLine.substring(0, queryIndex);
+                }
+                ref = normallyString(URLDecoder.decode(requestLine, UTF_8));
                 break;
             }
         }
 
         File file = new File(System.getProperty("user.dir")+"/"+webDir+ref);
 
-        ReceiveHttpRequestEvent event = new ReceiveHttpRequestEvent(ref,file);
+        ReceiveHttpRequestEvent event = new ReceiveHttpRequestEvent(originalInfo,file,true);
         HTcpWebServerModMain.EVENT_BUS.post(event);
         if(event.returnInfo!=null) return event.returnInfo;
+
+        file = event.getRequestFileOrDir();
+
+        if(file==null) return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes(UTF_8));
+
+        ReceiveHttpRequestEvent event2 = new ReceiveHttpRequestEvent(originalInfo,file,false);
+        HTcpWebServerModMain.EVENT_BUS.post(event2);
+        if(event2.returnInfo!=null) return event2.returnInfo;
 
         if(file.isDirectory()){
             File[] files = file.listFiles();
@@ -90,29 +107,29 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                 for (File file1 : files) {
                     if(indexes.contains(file1.getName().toLowerCase())){
                         if(HttpUtils.isText(file1.getName())){
-                            return new HttpUtils.FileInfo(file1, Files.readString(file1.toPath()).getBytes());
+                            return new HttpUtils.FileInfo(file1, Files.readString(file1.toPath(), UTF_8).getBytes(UTF_8));
                         }
                         else{
                             return new HttpUtils.FileInfo(file1, FileUtils.readFileToByteArray(file1));
                         }
                     }
                 }
-                return new HttpUtils.FileInfo(null,getFileList(files,webDir).getBytes());
+                return new HttpUtils.FileInfo(null,getFileList(files,webDir).getBytes(UTF_8));
             }
             else{
-                return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes());
+                return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes(UTF_8));
             }
         }
         else if(file.exists()){
             if(HttpUtils.isText(file.getName())){
-                return new HttpUtils.FileInfo(file, Files.readString(file.toPath()).getBytes());
+                return new HttpUtils.FileInfo(file, Files.readString(file.toPath(), UTF_8).getBytes(UTF_8));
             }
             else{
                 return new HttpUtils.FileInfo(file, FileUtils.readFileToByteArray(file));
             }
         }
         else{
-            return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes());
+            return new HttpUtils.FileInfo(null,createResponseHtml(404).getBytes(UTF_8));
         }
     }
 
@@ -125,21 +142,18 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
             if(context.file()!=null){
                 type = HttpUtils.getContentType(context.file().getName());
             }
-            if(HttpUtils.isTextType(type)){
-                contentBytes = new String(contentBytes).getBytes(StandardCharsets.UTF_8);
-            }
 
             String headerBuilder = "HTTP/1.1 200 OK\r\n" +
-                    "Content-Type: " + type + "\r\n" +
+                    "Content-Type: " + type + ";charset=utf-8" + "\r\n" +
                     "Content-Length: " + contentBytes.length + "\r\n" +
                     "Accept-Ranges: bytes\r\n" +
-                    "Connection: close\r\n" +
+                    "Connection: keep-alive\r\n" +
                     "Server: Minecraft-Server\r\n" +
-                    "Cache-Control: public, max-age=86400\r\n" + //24hours
+                    "Cache-Control: public, max-age=1800\r\n" +
                     "\r\n";
 
             ByteBuf responseBuf = Unpooled.buffer();
-            responseBuf.writeBytes(headerBuilder.getBytes(CharsetUtil.US_ASCII));
+            responseBuf.writeBytes(headerBuilder.getBytes(StandardCharsets.ISO_8859_1));
 
             responseBuf.writeBytes(contentBytes);
 
@@ -163,7 +177,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
     }
 
     public static String createResponseHtml(String info) {
-        return ("<!DOCTYPE html>" +
+        return "<!DOCTYPE html>" +
                 "<html>" +
                 "<head>" +
                 "<meta charset=\"UTF-8\">" +
@@ -171,10 +185,10 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
                 "</head>" +
                 "<body>" +
                 "<div class=\"container\">" +
-                "<h1>{info}</h1>" +
+                "<h1>" + info + "</h1>" +
                 "</div>" +
                 "</body>" +
-                "</html>").replace("{info}",info);
+                "</html>";
     }
 
     @Override
@@ -183,7 +197,7 @@ public class HTCPHandler extends ChannelInboundHandlerAdapter {
         ctx.close();
     }
 
-    private String normallyString(String s){
+    public static String normallyString(String s){
         StringBuilder builder = new StringBuilder();
         boolean f = true;
         for (char c : s.toCharArray()) {

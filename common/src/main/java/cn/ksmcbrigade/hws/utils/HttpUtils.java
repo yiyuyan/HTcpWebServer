@@ -122,6 +122,7 @@ public class HttpUtils {
                 case "css": return "text/css";
                 case "js": return "application/javascript";
                 case "json": return "application/json";
+                case "php":
                 case "txt": return "text/plain";
                 case "xml": return "application/xml";
 
@@ -155,34 +156,10 @@ public class HttpUtils {
                 case "js":
                 case "json":
                 case "txt":
+                case "php":
                 case "xml": return true;
             }
         }
         return false;
-    }
-
-    public static boolean isTextType(String type){
-        return switch (type) {
-            case "text/html", "text/css", "application/javascript", "application/json", "text/plain", "application/xml" -> true;
-            default -> false;
-        };
-    }
-
-    public static String detectEncoding(byte[] bytes) {
-        if (bytes.length >= 3 && bytes[0] == (byte) 0xEF && bytes[1] == (byte) 0xBB && bytes[2] == (byte) 0xBF) {
-            return "UTF-8";
-        } else if (bytes.length >= 2 && bytes[0] == (byte) 0xFE && bytes[1] == (byte) 0xFF) {
-            return "UTF-16BE";
-        } else if (bytes.length >= 2 && bytes[0] == (byte) 0xFF && bytes[1] == (byte) 0xFE) {
-            return "UTF-16LE";
-        } else if (bytes.length >= 4 && bytes[0] == (byte) 0x00 && bytes[1] == (byte) 0x00 && bytes[2] == (byte) 0xFE && bytes[3] == (byte) 0xFF) {
-            return "UTF-32BE";
-        } else if (bytes.length >= 2 && bytes[0] == (byte) 0x00 && bytes[1] != (byte) 0x00) {
-            return "UTF-16BE";
-        } else if (bytes.length >= 2 && bytes[0] != (byte) 0x00 && bytes[1] == (byte) 0x00) {
-            return "UTF-16LE";
-        } else {
-            return "ISO-8859-1";
-        }
     }
 }

@@ -2,6 +2,8 @@ package cn.ksmcbrigade.hws;
 
 import cn.ksmcbrigade.hws.event.handlers.BlockEventHandler;
 import cn.ksmcbrigade.hws.event.handlers.PHPEventHandler;
+import cn.ksmcbrigade.hws.event.handlers.RedirectEventHandler;
+import cn.ksmcbrigade.hws.platform.Services;
 import com.google.common.eventbus.EventBus;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -26,10 +28,16 @@ public class HTcpWebServerModMain {
             "index.shtml"
     );
 
+    private static boolean init = false;
+
     public static void init() {
+        if(init) return;
         Constants.LOG.info("Hello to {}",Constants.MOD_NAME);
+        Constants.LOG.info("DevelopmentEnvironment: {}", Services.SERVICE.isDevelopmentEnvironment());
+        RedirectEventHandler.init();
         BlockEventHandler.init();
         PHPEventHandler.init();
+        init = true;
     }
 
     public static void genConfig() throws IOException {
